@@ -18,16 +18,27 @@
                 <td>{{ cart.price }}</td>
                 <td>{{ cart.quantityInStock }}</td>
                 <td>
-                    <button class="btn btn-success"><i class="fa fa-arrow-up"></i></button>
-                    <span class="mx-2">1</span>
-                    <button class="btn btn-success"><i class="fa fa-arrow-down"></i></button>
+                    <button class="btn btn-success" @click="hanldeUpOrDownAmount(true, cart)">
+                        <i class="fa fa-arrow-up"></i></button>
+                    <span class="mx-2">{{ cart.amount }}</span>
+                    <button class="btn btn-success" @click="hanldeUpOrDownAmount(false, cart)">
+                        <i class="fa fa-arrow-down"></i></button>
                 </td>
-                <td>0</td>
+                <td>{{ cart.amount * cart.price }}</td>
                 <td>
-                    <button class="btn btn-danger">
+                    <button class="btn btn-danger" @click="hanldeDelete(cart)">
                         <i class="fa fa-trash"></i>
                     </button>
                 </td>
+            </tr>
+            <tr>
+                <td scope="row">Tổng Tiền</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ sumMonney }}</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -38,6 +49,19 @@ export default {
         cartList: {
             type: Array,
         }
+    },
+    computed: {
+        sumMonney() {
+            return this.cartList.reduce((sum, cart) => sum += cart.amount * cart.price, 0)
+        },
+    },
+    methods: {
+        hanldeDelete(cart) {
+            this.$emit("hanlde-delete-cart", cart);
+        },
+        hanldeUpOrDownAmount(statur, cart) {
+            this.$emit("hanlde-up-or-down-amount-cart", { statur, cart });
+        },
     },
 };
 </script>

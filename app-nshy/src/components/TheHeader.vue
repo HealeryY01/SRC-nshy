@@ -37,7 +37,7 @@
             <div class="ml-2">
                 <button class="btn btn-danger" @click="hanldeOpenModalCartList">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="badge badge-light ml-2">0</span>
+                    <span class="badge badge-light ml-2">{{ sumAmountCart }}</span>
                 </button>
             </div>
         </div>
@@ -45,7 +45,8 @@
     <teleport to="#app">
         <app-modal :isOpen="isOpenModalCartList" :hanldeCloseModal="hanldeCloseModalCartList">
             <section>
-                <cart-list :cartList="cartList" />
+                <cart-list :cartList="cartList" @hanlde-delete-cart="hanldeDelete"
+                    @hanlde-up-or-down-amount-cart="hanldeUpOrDownAmount" />
             </section>
         </app-modal>
     </teleport>
@@ -57,6 +58,11 @@ export default {
         cartList: {
             type: Array,
         }
+    },
+    computed: {
+        sumAmountCart() {
+            return this.cartList.reduce((sum, cart) => sum += cart.amount, 0);
+        },
     },
     components: {
         CartList,
@@ -72,7 +78,13 @@ export default {
         },
         hanldeCloseModalCartList() {
             this.isOpenModalCartList = false; //Đóng modal
-        }
+        },
+        hanldeDelete(cart) {
+            this.$emit("hanlde-delete-cart", cart);
+        },
+        hanldeUpOrDownAmount(params) {
+            this.$emit("hanlde-up-or-down-amount-cart", params);
+        },
     },
 };
 </script>
